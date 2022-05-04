@@ -17,7 +17,7 @@ public class GroupTable extends TableAbs  implements ITable<Group> {
 
     public GroupTable(String dbType) {
         super(dbType);
-        this.dbExecutor.create(Group.tableName, "id int NOT NULL, name VARCHAR(50) NOT NULL, curatorId int NOT NULL, PRIMARY KEY (`id`), FOREIGN KEY (`curatorId`) REFERENCES `curators` (`id`)");
+        dbExecutor.create(Group.tableName, "id int NOT NULL, name VARCHAR(50) NOT NULL, curatorId int NOT NULL, PRIMARY KEY (`id`), FOREIGN KEY (`curatorId`) REFERENCES `curators` (`id`) ON DELETE CASCADE ON UPDATE CASCADE");
     }
 
     @Override
@@ -25,14 +25,14 @@ public class GroupTable extends TableAbs  implements ITable<Group> {
         ReadGroupsTable reader = new ReadGroupsTable();
         List<Group> data = reader.read(Group.fileName);
         for(Group group: data){
-            this.dbExecutor.add(Group.tableName, String.format("%s, '%s', %s", group.getId(), group.getName(), group.getCuratorId()));
+            dbExecutor.add(Group.tableName, String.format("%s, '%s', %s", group.getId(), group.getName(), group.getCuratorId()));
         }
 
     }
 
     @Override
     public List<Group> list(){
-        ResultSet resultSet = this.dbExecutor.get(Group.tableName);
+        ResultSet resultSet = dbExecutor.get(Group.tableName);
         List<Group> groups = new ArrayList<>();
         try {
             while (resultSet.next()){
@@ -57,7 +57,7 @@ public class GroupTable extends TableAbs  implements ITable<Group> {
         String[] tables = new String[2];
         tables[0] = GroupWithCurator.groupTableName;
         tables[1] = GroupWithCurator.curatorTableName;
-        ResultSet resultSet = this.dbExecutor.leftJoin(columnNames, tables, String.format("%s.%s", GroupWithCurator.groupTableName, "curatorId"), String.format("%s.%s", GroupWithCurator.curatorTableName, "id"));
+        ResultSet resultSet = dbExecutor.leftJoin(columnNames, tables, String.format("%s.%s", GroupWithCurator.groupTableName, "curatorId"), String.format("%s.%s", GroupWithCurator.curatorTableName, "id"));
         List<GroupWithCurator> groupsWithCurators = new ArrayList<>();
 
       try {
@@ -75,13 +75,26 @@ public class GroupTable extends TableAbs  implements ITable<Group> {
         return groupsWithCurators;
     }
 
-    public List<GroupWithCurator> setNewCurator(String oldValue, String newValue){
+    public List<Group> setNewCurator(String oldValue, String newValue){
         String tableName = GroupWithCurator.groupTableName;
-        String column = String.format("%s.%s", GroupWithCurator.groupTableName, "id");
-        String condition = String.format("id = %s", oldValue);
-        this.dbExecutor.update(tableName, column, newValue, condition);
-        List<GroupWithCurator> result = getGroupWithCurator();
-        return result;
+        dbExecutor.update(tableName, "curatorId", newValue, oldValue);
+
+        ResultSet resultSet = dbExecutor.get(Group.tableName, "curatorID", newValue);
+        List<Group> groups = new ArrayList<>();
+        try {
+            while (resultSet.next()){
+                groups.add(new Group(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3)
+                ));
+            }
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return groups;
     }
+
+
 
 }

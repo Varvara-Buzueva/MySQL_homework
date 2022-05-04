@@ -7,9 +7,10 @@ public interface IDbExecutor {
    void add(String tableName, String newElement);
    void create(String tableName, String dataDefinitionRequest);
    ResultSet get(String tableName);
-   ResultSet get(String tableName, String condition);
+   ResultSet get(String tableName, String column, String value);
    int getCount(String tableName);
-   boolean update(String tableName, String column, String newValue, String condition);
+   boolean update(String tableName, String column, String newValue, String oldValue);
    ResultSet leftJoin(String[] columnsName, String[] tables, String firstTableColumn, String secondTableColumn);
+   ResultSet multipleLeftJoin(String[] columnsName, String[] tables, String[] primaryKeys, String[] foreignKeys);
    void close();
 }

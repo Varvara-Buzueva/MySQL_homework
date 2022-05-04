@@ -53,10 +53,10 @@ public class DBExecutor implements IDbExecutor{
         return resultSet;
     }
 
-    public ResultSet get(String tableName, String condition){
+    public ResultSet get(String tableName, String column, String value){
         ResultSet resultSet = null;
         if (instance != null) {
-            resultSet = executor.get(tableName, condition);
+            resultSet = executor.get(tableName, column, value);
         }
         return resultSet;
     }
@@ -85,10 +85,19 @@ public class DBExecutor implements IDbExecutor{
         return resultSet;
     }
 
-    public boolean update(String tableName, String column, String newValue, String condition){
+    public ResultSet multipleLeftJoin(String[] columnsName, String[] tables, String[] primaryKeys, String[] foreignKeys) {
+        ResultSet resultSet = null;
+        if (instance != null) {
+            resultSet = executor.multipleLeftJoin(columnsName, tables, primaryKeys, foreignKeys);
+        }
+        return resultSet;
+
+    }
+
+        public boolean update(String tableName, String column, String newValue, String oldValue){
         boolean isUpdated = false;
         if (instance != null) {
-            isUpdated = executor.update(tableName, column, newValue, condition);
+            isUpdated = executor.update(tableName, column, newValue, oldValue);
         }
         return isUpdated;
     }

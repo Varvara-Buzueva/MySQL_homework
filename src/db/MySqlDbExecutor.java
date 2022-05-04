@@ -67,13 +67,25 @@ public class MySqlDbExecutor implements IDbExecutor{
         }
     }
 
+    public ResultSet execute(String sqlRequest) {
+        ResultSet resultSet = null;
+
+        try {
+            resultSet = statement.executeQuery(sqlRequest);
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+
+        return resultSet ;
+    }
+
     public ResultSet get(String tableName){
         String request = String.format("select * from %s;", tableName);
         return execute(request);
     }
 
-    public ResultSet get(String tableName, String condition){
-        String request = String.format("select * from %s where %s;", tableName, condition);
+    public ResultSet get(String tableName, String column, String value){
+        String request = String.format("select * from %s where %s = %s;", tableName, column, value);
         return execute(request);
     }
 
@@ -88,18 +100,6 @@ public class MySqlDbExecutor implements IDbExecutor{
             e.printStackTrace();
         }
         return count;
-    }
-
-    public ResultSet execute(String sqlRequest) {
-        ResultSet resultSet = null;
-
-        try {
-            resultSet = statement.executeQuery(sqlRequest);
-        }catch (SQLException ex){
-            ex.printStackTrace();
-        }
-
-        return resultSet ;
     }
 
     public ResultSet leftJoin(String[] columnsName, String[] tables, String firstTableColumn, String secondTableColumn){
@@ -117,8 +117,29 @@ public class MySqlDbExecutor implements IDbExecutor{
         return execute(request);
     }
 
-    public boolean update(String tableName, String column, String newValue, String condition){
-        String request = String.format("update %s set %s = %s where %s;", tableName, column, newValue, condition );
+    public ResultSet multipleLeftJoin(String[] columnsName, String[] tables, String[] primaryKeys, String[] foreignKeys){
+
+        StringBuilder sb = new StringBuilder();
+        String delimiter =", ";
+        for ( String element : columnsName ) {
+            if (sb.length() > 0) {
+                sb.append( delimiter );
+            }
+            sb.append( element );
+        }
+        String columns = sb.toString();
+        String[] conditions = new String[2];
+        for (int i = 0; i < 2; i++){
+            conditions[i] = String.format("%s = %s", foreignKeys[i], primaryKeys[i]);
+        }
+
+        String request = String.format("SELECT %s FROM %s LEFT JOIN %s ON %s INNER JOIN %s ON %s;", columns, tables[0], tables[1], conditions[0], tables[2], conditions[1]);
+        return execute(request);
+    }
+
+    public boolean update(String tableName, String column, String newValue, String oldValue){
+        String request = String.format("update %s set %s = %s where %s = %s;", tableName, column, newValue, column, oldValue);
+        System.out.println(request);
         try{
             statement.execute(request);
             return true;
