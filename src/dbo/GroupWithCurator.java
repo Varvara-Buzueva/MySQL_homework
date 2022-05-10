@@ -1,9 +1,10 @@
 package dbo;
 
 public class GroupWithCurator {
-    private int id;
-    private String name;
-    private String curatorFio;
+    private final int id;
+    private final String name;
+    private final String curatorFio;
+
     public static String groupTableName = "groups_name";
     public static String curatorTableName = "curators";
 

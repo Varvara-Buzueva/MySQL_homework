@@ -9,5 +9,4 @@ public  abstract class TableAbs{
     public TableAbs(String dbType){
         dbExecutor = DBExecutor.getInstance(dbType);
     }
-
 }

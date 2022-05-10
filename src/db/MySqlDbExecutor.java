@@ -1,6 +1,5 @@
 package db;
 
-import dbo.Curator;
 import utils.resources.IReadProperty;
 import utils.resources.ReadPropertiesFromPropsFile;
 

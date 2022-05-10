@@ -1,7 +1,6 @@
 package dbo;
 
 public class StudentFull {
-
     private final int id;
     private final String fio;
     private final String sex;

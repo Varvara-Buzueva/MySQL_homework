@@ -17,7 +17,6 @@ public class DBExecutor implements IDbExecutor{
     }
 
     public void add(String tableName, String newElement){
-        ResultSet resultSet = null;
         if (instance != null) {
             executor.add(tableName, newElement);
         }
@@ -103,7 +102,7 @@ public class DBExecutor implements IDbExecutor{
 
     }
 
-        public boolean update(String tableName, String column, String newValue, String oldValue){
+    public boolean update(String tableName, String column, String newValue, String oldValue){
         boolean isUpdated = false;
         if (instance != null) {
             isUpdated = executor.update(tableName, column, newValue, oldValue);

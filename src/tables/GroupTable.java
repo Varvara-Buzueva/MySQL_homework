@@ -1,9 +1,7 @@
 package tables;
 
-import dbo.Curator;
 import dbo.Group;
 import dbo.GroupWithCurator;
-import utils.resources.ReadCuratorsTable;
 import utils.resources.ReadGroupsTable;
 
 import java.sql.ResultSet;
@@ -12,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupTable extends TableAbs  implements ITable<Group> {
-
-    private Group groups;
 
     public GroupTable(String dbType) {
         super(dbType);
@@ -94,7 +90,4 @@ public class GroupTable extends TableAbs  implements ITable<Group> {
         }
         return groups;
     }
-
-
-
 }

@@ -1,6 +1,5 @@
 package tables;
 
-import dbo.GroupWithCurator;
 import dbo.Student;
 import dbo.StudentFull;
 import utils.resources.ReadStudentsTable;
@@ -12,13 +11,12 @@ import java.util.List;
 
 public class StudentsTable extends TableAbs implements ITable<Student>{
 
-    private Student student;
-
     public StudentsTable(String dbType) {
         super(dbType);
          dbExecutor.create( Student.tableName,"id int NOT NULL, fio VARCHAR(50) NOT NULL, sex VARCHAR(3) NOT NULL, groupId int NOT NULL, PRIMARY KEY (`id`), FOREIGN KEY (`groupId`) REFERENCES `groups_name` (`id`) ON DELETE CASCADE ON UPDATE CASCADE");
     }
 
+    @Override
     public void fill() {
         ReadStudentsTable reader = new ReadStudentsTable();
         List<Student> data = reader.read(Student.fileName);
@@ -138,8 +136,6 @@ public class StudentsTable extends TableAbs implements ITable<Student>{
         return students;
 
     }
-
-
 }
 
 

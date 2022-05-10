@@ -1,4 +1,3 @@
-import db.DBExecutor;
 import dbo.*;
 import tables.CuratorsTable;
 import tables.GroupTable;

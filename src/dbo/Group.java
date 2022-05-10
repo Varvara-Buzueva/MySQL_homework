@@ -1,12 +1,12 @@
 package dbo;
 
 public class Group {
+  private final int id;
+  private final String name;
+  private final int curatorId;
+
   public final static String tableName ="groups_name";
   public final static String fileName = "groups.table";
-
-  private int id;
-  private String name;
-  private int curatorId;
 
   public Group(int id, String name, int curatorId){
     this.id = id;
