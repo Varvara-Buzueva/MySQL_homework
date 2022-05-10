@@ -144,7 +144,7 @@ public class MySqlDbExecutor implements IDbExecutor{
 
     public boolean update(String tableName, String column, String newValue, String oldValue){
         String request = String.format("update %s set %s = %s where %s = %s;", tableName, column, newValue, column, oldValue);
-        System.out.println(request);
+
         try{
             statement.execute(request);
             return true;
