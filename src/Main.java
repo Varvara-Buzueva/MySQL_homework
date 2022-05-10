@@ -63,7 +63,17 @@ public class Main {
 
         }
 
+        // п.10 - Используя вложенные запросы вывести на экран студентов из определённой группы (поиск по имени группы)
 
+        List<Student> studentsFromGroup = studentsTable.getStudentsFromGroup("Динамика полёта и управление движением КА");
+
+        System.out.println("п.10 - Используя вложенные запросы вывести на экран студентов из определённой группы (поиск по имени группы)");
+        for (Student student : studentsFromGroup){
+            System.out.println(student.getId());
+            System.out.println(student.getFio());
+            System.out.println(student.getSex());
+            System.out.println(student.getGroupId());
+        }
     }
 }
 

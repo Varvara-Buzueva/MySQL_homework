@@ -90,6 +90,34 @@ public class StudentsTable extends TableAbs implements ITable<Student>{
         return dbExecutor.getCount(Student.tableName);
     }
 
+    public List<Student> getStudentsFromGroup(String groupName){
+        String[] tables = new String[2];
+        tables[0] = StudentFull.studentsTableName;
+        tables[1] = StudentFull.groupTableName;
+        String[] columns = new String[3];
+        columns[0] = "groupId";
+        columns[1] = "id";
+        columns[2] = "name";
+
+        ResultSet resultSet = dbExecutor.getStudentsFromGroup(tables, columns, String.format("'%s'",groupName));
+        List<Student> students = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                students.add (new Student(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getInt(4)
+                ));
+            }
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return students;
+
+    }
+
     public List<Student> getFemales(){
 
         ResultSet resultSet = dbExecutor.get(Student.tableName,"sex","'Жен'");

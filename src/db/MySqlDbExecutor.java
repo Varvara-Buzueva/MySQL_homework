@@ -54,11 +54,11 @@ public class MySqlDbExecutor implements IDbExecutor{
     public void create(String tableName, String dataDefinitionRequest) {
 
         try{
-            String request = String.format("SET foreign_key_checks = 0;");
+            String request = "SET foreign_key_checks = 0;";
             statement.execute(request);
             request = String.format("DROP TABLE IF EXISTS %s;", tableName);
             statement.execute(request);
-            request = String.format("SET foreign_key_checks = 1;");
+            request = "SET foreign_key_checks = 1;";
             statement.execute(request);
             request = String.format("CREATE TABLE %s(%s);",tableName, dataDefinitionRequest);
             statement.execute(request);
@@ -100,6 +100,12 @@ public class MySqlDbExecutor implements IDbExecutor{
             e.printStackTrace();
         }
         return count;
+    }
+
+    public ResultSet getStudentsFromGroup(String[] tables, String[] columns, String groupName){
+        // SELECT * FROM Students WHERE groupId = (SELECT id FROM groups_name WHERE name = X);
+        String request = String.format("select * from %s where %s = (select %s from %s where %s = %s);", tables[0], columns[0], columns[1], tables[1], columns[2], groupName);
+        return  execute(request);
     }
 
     public ResultSet leftJoin(String[] columnsName, String[] tables, String firstTableColumn, String secondTableColumn){

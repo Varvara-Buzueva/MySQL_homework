@@ -77,6 +77,15 @@ public class DBExecutor implements IDbExecutor{
         return instance;
     }
 
+    public ResultSet getStudentsFromGroup(String[] tables, String[] columns, String groupName){
+        ResultSet resultSet = null;
+        if (instance != null) {
+            resultSet = executor.getStudentsFromGroup(tables, columns, groupName);
+        }
+        return resultSet;
+
+    }
+
     public ResultSet leftJoin(String[] columnsName, String[] tables, String firstTableColumn, String secondTableColumn){
         ResultSet resultSet = null;
         if (instance != null) {
